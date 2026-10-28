@@ -23,7 +23,7 @@ planner-foco-leve/
 ├── index.html        → a página de vendas (HTML e CSS em um só arquivo)
 ├── termos.html       → termos de uso
 ├── privacidade.html  → política de privacidade (LGPD)
-├── img/              → imagens do site (inclui img/infografico.jpg)
+├── img/              → imagens das páginas do planner usadas no site
 └── README.md         → este arquivo
 ```
 
@@ -54,17 +54,18 @@ Abra o `index.html` no GitHub, clique no lápis (**Edit**), faça a alteração 
 | `[SEU CPF OU CNPJ]` | Seu CPF ou CNPJ |
 | `[SEU E-MAIL DE CONTATO]` | E-mail para suporte e privacidade |
 
-Os botões de compra ("Quero meu Foco Leve", no topo, no cartão de preço e no final da página) levam ao checkout da Hotmart.
+Os botões **"Garantir o meu"** e **"Quero meu planner agora"** já levam ao checkout da Hotmart.
 
 ## Cores e fontes
 
 | Uso | Valor |
 |---|---|
-| Fundo | `#fffaf0` |
-| Verde (botões e oferta) | `#2f5b45` |
-| Amarelo (destaques) | `#ffd66b` |
-| Texto | `#29251f` |
-| Fonte | Inter / fonte do sistema |
+| Fundo | `#0B0A09` |
+| Cartões | `#151311` |
+| Texto | `#F4EFE9` |
+| Destaque (botões) | `#FF7A45` |
+| Rótulos | `#B8A3FF` |
+| Fontes | Bricolage Grotesque (títulos) e Inter (textos), via Google Fonts |
 
 ## Aviso
 
