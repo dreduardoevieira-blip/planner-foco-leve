@@ -1,612 +1,240 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Conheça o Foco Leve: um planner digital para ajudar você a visualizar prioridades, organizar tarefas e planejar sua rotina com mais clareza.">
-  <meta name="theme-color" content="#f7c95c">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
-  <title>Foco Leve | Organize sua rotina com mais leveza</title>
-  <style>
-    :root{
-      --cream:#fffaf0; --paper:#fffdf8; --yellow:#ffd66b; --yellow-deep:#f5bd3f;
-      --peach:#f6d8bd; --lavender:#e8e1f5; --mint:#dcefe4; --ink:#29251f;
-      --muted:#6c655a; --brown:#73553b; --line:#eee2ce; --white:#fff;
-      --shadow:0 18px 45px rgba(83,61,28,.10); --radius:24px;
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{margin:0;background:var(--cream);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6}
-    a{color:inherit}
-    .wrap{width:min(1120px,calc(100% - 40px));margin:auto}
-    .announcement{background:#2f5b45;color:#fff;text-align:center;padding:9px 16px;font-size:.86rem;font-weight:700;letter-spacing:.02em}
-    header{padding:20px 0}
-    .nav{display:flex;align-items:center;justify-content:space-between;gap:20px}
-    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:900;font-size:1.22rem;letter-spacing:-.04em}
-    .brand-mark{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:var(--yellow);font-size:1.4rem;box-shadow:0 5px 0 #e8b943}
-    .nav-note{font-size:.9rem;color:var(--muted)}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;border:0;border-radius:999px;background:#2f5b45;color:white;font-weight:850;padding:16px 24px;min-height:54px;box-shadow:0 7px 0 #214431;transition:transform .18s,box-shadow .18s;cursor:pointer}
-    .btn:hover{transform:translateY(2px);box-shadow:0 5px 0 #214431}
-    .btn-yellow{background:var(--yellow);color:#29251f;box-shadow:0 7px 0 #e5b443}
-    .btn-yellow:hover{box-shadow:0 5px 0 #e5b443}
-    .hero{padding:38px 0 72px;overflow:hidden}
-    .hero-grid{display:grid;grid-template-columns:1.06fr .94fr;align-items:center;gap:55px}
-    .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border:1px solid #ecd9a9;background:#fff3cc;border-radius:999px;font-size:.82rem;font-weight:800;color:#745421}
-    h1,h2,h3,p{margin-top:0}
-    h1{font-size:clamp(2.6rem,5.4vw,4.7rem);line-height:1.02;letter-spacing:-.065em;margin:20px 0}
-    h1 .highlight{position:relative;z-index:0;white-space:nowrap}
-    h1 .highlight:after{content:"";position:absolute;left:-3px;right:-3px;bottom:3px;height:25%;background:var(--yellow);z-index:-1;transform:rotate(-1.5deg);border-radius:5px}
-    .hero-copy{font-size:1.12rem;color:var(--muted);max-width:590px}
-    .hero-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:25px 0 14px}
-    .micro{font-size:.84rem;color:var(--muted)}
-    .ticks{display:flex;flex-wrap:wrap;gap:12px 18px;margin-top:22px;font-size:.9rem;color:#4f4a41}
-    .ticks span:before{content:"✓";display:inline-grid;place-items:center;width:21px;height:21px;background:var(--mint);border-radius:50%;font-weight:900;margin-right:7px;color:#2f5b45}
-    .hero-art{position:relative;min-height:490px;display:grid;place-items:center}
-    .blob{position:absolute;width:390px;height:390px;background:#f8dfa0;border-radius:48% 52% 61% 39% / 44% 43% 57% 56%;transform:rotate(-9deg)}
-    .planner{position:relative;width:min(330px,78%);background:white;border:1px solid #eee3d2;border-radius:15px;padding:18px;box-shadow:0 24px 50px rgba(70,48,18,.2);transform:rotate(3deg)}
-    .planner-top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee5d8;padding-bottom:12px;margin-bottom:12px}
-    .planner-logo{font-size:.76rem;font-weight:900;letter-spacing:.04em;color:#3d6b50}
-    .week{font-size:.66rem;color:#81776a}
-    .planner h3{font-size:1.2rem;line-height:1.15;margin:10px 0 14px}
-    .planner-label{font-size:.64rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#8b7658;margin:10px 0 7px}
-    .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-    .mini-card{min-height:58px;border-radius:8px;padding:8px;background:#fff3d3;font-size:.65rem;font-weight:700}
-    .mini-card.pink{background:#f9e4db}.mini-card.lilac{background:#eee8f8}.mini-card.green{background:#e3f0e5}
-    .lines{height:7px;border-bottom:1px solid #d8cebf;margin-top:7px}
-    .lines.short{width:65%}
-    .sticker{position:absolute;border-radius:16px;padding:12px 15px;background:white;box-shadow:var(--shadow);font-size:.85rem;font-weight:850}
-    .sticker.one{top:48px;right:-2px;transform:rotate(7deg);background:#e2f1e6}
-    .sticker.two{bottom:48px;left:-4px;transform:rotate(-7deg);background:#fff}
-    .sticker span{font-size:1.2rem;margin-right:5px}
-    .section{padding:76px 0}
-    .section.white{background:var(--paper)}
-    .section-head{text-align:center;max-width:740px;margin:0 auto 38px}
-    .kicker{font-size:.78rem;text-transform:uppercase;letter-spacing:.14em;font-weight:900;color:#8b6a25}
-    h2{font-size:clamp(2rem,4vw,3.2rem);line-height:1.1;letter-spacing:-.045em;margin:10px 0 14px}
-    .section-head p{color:var(--muted);font-size:1.04rem}
-    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    .card{padding:25px;border:1px solid var(--line);background:#fff;border-radius:var(--radius);box-shadow:0 8px 24px rgba(70,48,18,.035)}
-    .icon{display:grid;place-items:center;width:52px;height:52px;border-radius:16px;background:#fff0c4;font-size:1.55rem;margin-bottom:17px}
-    .card:nth-child(2) .icon{background:var(--lavender)}.card:nth-child(3) .icon{background:var(--mint)}
-    .card h3{font-size:1.15rem;margin-bottom:8px}
-    .card p{color:var(--muted);margin-bottom:0;font-size:.96rem}
-    .split{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:55px}
-    .visual-panel{padding:30px;background:#fff0c7;border-radius:28px;position:relative;overflow:hidden}
-    .visual-panel h3{font-size:1.55rem;line-height:1.2;max-width:330px}
-    .sample-list{display:grid;gap:10px;margin-top:20px}
-    .sample-row{display:flex;align-items:center;gap:12px;background:#fff;border-radius:13px;padding:12px 14px;font-size:.9rem;font-weight:700}
-    .sample-row .check{width:22px;height:22px;border:2px solid #d8c6a0;border-radius:7px;flex:0 0 auto}
-    .sample-row.done{color:#8c8579;text-decoration:line-through}
-    .sample-row.done .check{background:#3d6b50;border-color:#3d6b50;position:relative}
-    .sample-row.done .check:after{content:"✓";color:white;position:absolute;top:-3px;left:3px}
-    .feature-list{list-style:none;padding:0;margin:23px 0}
-    .feature-list li{display:flex;gap:12px;margin:13px 0;color:#514b42}
-    .feature-list li:before{content:"✓";flex:0 0 25px;width:25px;height:25px;display:grid;place-items:center;border-radius:50%;background:var(--mint);color:#2f5b45;font-weight:900}
-    .note{font-size:.86rem;color:var(--muted)}
-    .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;counter-reset:steps}
-    .step{padding:25px;background:#fff;border-radius:22px;border:1px solid var(--line);counter-increment:steps}
-    .step:before{content:"0" counter(steps);display:block;color:#a77a19;font-size:1.6rem;font-weight:950;margin-bottom:14px}
-    .step h3{margin-bottom:8px}.step p{color:var(--muted);font-size:.95rem;margin-bottom:0}
-    .offer-section{background:#2f5b45;color:#fff}
-    .offer-grid{display:grid;grid-template-columns:1fr .8fr;align-items:center;gap:55px}
-    .offer-section .kicker{color:#ffdc80}
-    .offer-section h2{max-width:600px}
-    .offer-section p{color:#e3eadf}
-    .offer-points{list-style:none;padding:0;margin:22px 0}
-    .offer-points li{margin:11px 0}
-    .offer-points li:before{content:"✓";color:#ffdc80;font-weight:900;margin-right:10px}
-    .price-card{background:#fffaf0;color:var(--ink);padding:30px;border-radius:26px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.16)}
-    .price-card .tag{display:inline-block;background:#ffedb4;color:#73551c;border-radius:999px;padding:7px 12px;font-size:.78rem;font-weight:900}
-    .price-label{margin:20px 0 0;color:var(--muted)!important;font-size:.9rem}
-    .price{font-size:3.8rem;font-weight:950;letter-spacing:-.07em;line-height:1.1;margin:2px 0 12px}
-    .price small{font-size:1.1rem;vertical-align:top;letter-spacing:0}
-    .price-card .btn{width:100%;margin:10px 0 12px}
-    .price-card p{color:var(--muted)}
-    .secure{font-size:.78rem;color:var(--muted)!important;margin:0}
-    .faq{max-width:800px;margin:auto}
-    details{border-bottom:1px solid var(--line);padding:18px 0}
-    summary{font-weight:850;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:20px}
-    summary:after{content:"+";font-size:1.4rem;color:#8b6a25;line-height:1}
-    details[open] summary:after{content:"−"}
-    details p{margin:12px 0 0;color:var(--muted)}
-    .final-cta{text-align:center;padding:76px 0;background:#fff0c7}
-    .final-cta p{color:var(--muted);max-width:620px;margin:0 auto 24px}
-    footer{padding:28px 0;background:#242b25;color:#e6e8e2;font-size:.82rem}
-    .footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
-    footer a{color:#fff}
-    .disclaimer{font-size:.78rem;color:#c8d0c8;max-width:850px;margin-top:16px}
-
-    .product-showcase{display:grid;grid-template-columns:.85fr 1.15fr;align-items:center;gap:50px}
-    .cover-stage{min-height:430px;display:grid;place-items:center;position:relative;background:radial-gradient(circle at 50% 45%,#fff4ce 0,#f8e3aa 45%,#f4d7a0 100%);border-radius:30px;overflow:hidden}
-    .cover-book{position:relative;width:250px;min-height:335px;padding:24px 22px 20px;background:#fffaf0;border:1px solid #ead9b7;border-radius:8px 16px 16px 8px;box-shadow:18px 18px 0 #d8b66c,25px 28px 38px rgba(83,61,28,.25);transform:rotate(-5deg);display:flex;flex-direction:column;align-items:center;text-align:center}
-    .cover-book:before{content:"";position:absolute;left:9px;top:0;bottom:0;width:5px;background:linear-gradient(90deg,#e3c78e,#fff7e3);border-radius:4px}
-    .cover-spark{width:53px;height:53px;border-radius:18px;background:var(--yellow);display:grid;place-items:center;font-size:1.7rem;color:#2f5b45;margin:4px auto 17px}
-    .cover-kicker{font-size:.62rem;font-weight:900;letter-spacing:.16em;color:#5b775c;text-transform:uppercase}
-    .cover-book h3{font-size:2.1rem;line-height:.95;letter-spacing:-.07em;margin:9px 0;color:#2f5b45}
-    .cover-book h3 span{color:#c18a25}
-    .cover-sub{font-size:.75rem;line-height:1.4;color:#655a48;margin:7px 0 18px}
-    .cover-illustration{width:100%;border-radius:13px;background:#fff0c7;padding:12px 9px;margin-top:auto}
-    .cover-tiles{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-    .cover-tiles span{display:block;border-radius:7px;padding:8px 3px;font-size:.55rem;font-weight:800;background:#e1efe4}
-    .cover-tiles span:nth-child(2){background:#f7dfd3}.cover-tiles span:nth-child(3){background:#e8e1f5}.cover-tiles span:nth-child(4){background:#ffe5a0}
-    .cover-foot{font-size:.57rem;font-weight:800;letter-spacing:.08em;color:#7b6849;margin-top:12px}
-    .cover-badge{position:absolute;right:9%;top:12%;background:#2f5b45;color:white;border-radius:50%;width:84px;height:84px;display:grid;place-items:center;text-align:center;font-size:.7rem;font-weight:900;line-height:1.2;transform:rotate(10deg);box-shadow:0 8px 18px #9c7a3d55}
-    .cover-caption{position:absolute;left:8%;bottom:9%;font-size:.8rem;font-weight:850;color:#705b32;background:#fffaf0;padding:10px 14px;border-radius:12px;transform:rotate(4deg);box-shadow:var(--shadow)}
-    .usage-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    .usage-card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px}
-    .usage-number{display:grid;place-items:center;width:40px;height:40px;border-radius:13px;background:var(--yellow);font-weight:950;margin-bottom:16px}
-    .usage-card:nth-child(2) .usage-number{background:var(--lavender)}.usage-card:nth-child(3) .usage-number{background:var(--mint)}
-    .usage-card h3{margin-bottom:8px}.usage-card p{font-size:.94rem;color:var(--muted);margin-bottom:0}
-    .testimonial-note{max-width:780px;margin:0 auto 25px;padding:13px 16px;background:#fff0c7;border-radius:13px;color:#705b32;font-size:.88rem;text-align:center}
-    .testimonial-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    .testimonial{background:#fff;border:1px solid var(--line);border-radius:22px;padding:23px}
-    .testimonial .stars{color:#bd8a1d;letter-spacing:2px;font-size:1.05rem}
-    .testimonial blockquote{margin:12px 0 18px;font-size:.96rem;color:#514b42}
-    .testimonial .person{display:flex;align-items:center;gap:10px;font-size:.83rem;color:var(--muted)}
-    .avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#f7dfd3;font-size:1rem;font-weight:900;color:#73553b}
-    .testimonial.placeholder{border-style:dashed;background:#fffdf8}
-    .testimonial.placeholder blockquote{font-weight:750;color:#73553b}
-
-    .benefits-visual-section{background:#fffaf0;padding:34px 0 70px}
-    .benefits-visual-wrap{max-width:1000px;margin:0 auto}
-    .benefits-visual-image{display:block;width:100%;height:auto;border-radius:20px;box-shadow:0 18px 45px rgba(83,61,28,.12);border:1px solid #eee2ce}
-    .benefits-visual-caption{text-align:center;color:#6c655a;font-size:.88rem;margin:14px auto 0;max-width:760px}
-    @media(max-width:600px){.benefits-visual-section{padding:24px 0 48px}.benefits-visual-image{border-radius:12px}}
-
-
-    .adhd-callout{display:flex;align-items:flex-start;gap:12px;max-width:590px;margin:20px 0 4px;padding:14px 16px;background:#fff2cc;border:1px solid #f0d68f;border-radius:16px;color:#514126;font-size:.91rem;line-height:1.45}
-    .adhd-callout-icon{font-size:1.45rem;line-height:1.2}
-    .adhd-callout strong{color:#352b1c}
-    .adhd-callout span span{color:#6c655a}
-
-    @media(max-width:820px){.product-showcase{grid-template-columns:1fr;gap:28px}.cover-stage{min-height:390px}.usage-grid,.testimonial-grid{grid-template-columns:1fr}}
-
-    @media(max-width:820px){
-      .hero-grid,.split,.offer-grid{grid-template-columns:1fr;gap:35px}
-      .hero{padding-top:25px}.hero-art{min-height:430px;order:2}.hero-copy-wrap{order:1}
-      .cards,.steps{grid-template-columns:1fr}
-      .section{padding:58px 0}.nav-note{display:none}
-      .blob{width:330px;height:330px}
-      .offer-grid{gap:25px}
-    }
-    @media(max-width:480px){
-      .wrap{width:min(100% - 28px,1120px)}
-      h1{font-size:2.65rem}.hero-copy{font-size:1rem}
-      .hero-actions .btn{width:100%}.hero-art{min-height:380px}
-      .blob{width:290px;height:290px}.planner{width:78%;padding:14px}
-      .sticker.one{right:0;top:25px}.sticker.two{left:0;bottom:22px}
-      .price{font-size:3.25rem}
-    }
-
-    /* Infográfico em HTML */
-    .ib{--ib-green:#2f3f2a;--ib-olive:#5d6b2f;--ib-yel:#f6c94e;--ib-yel2:#fde7a6;--ib-cream:#fff8e8;--ib-ink:#2b2a22;--ib-mut:#5f5a4c;background:var(--ib-cream);color:var(--ib-ink);overflow:hidden}
-    .ib .ib-script{font-family:"Caveat",cursive;font-weight:700;color:var(--ib-green);line-height:1.1}
-    .ib-hero{padding:56px 0 40px;background:radial-gradient(120% 90% at 100% 0,#fdeab4 0,transparent 55%),var(--ib-cream)}
-    .ib-hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
-    .ib-logo{font-weight:950;font-size:clamp(2.8rem,6vw,4.6rem);letter-spacing:-.03em;line-height:.95;margin:0;color:var(--ib-green)}
-    .ib-logo span{color:#e7b52c}
-    .ib-sub{font-weight:800;letter-spacing:.32em;font-size:1rem;margin:6px 0 14px 4px}
-    .ib-tag{font-size:clamp(1.7rem,3vw,2.3rem);margin:0 0 4px;transform:rotate(-2deg);display:inline-block}
-    .ib-under{display:block;height:7px;width:230px;background:var(--ib-yel);border-radius:9px;margin:2px 0 18px;transform:rotate(-1deg)}
-    .ib-lead{font-size:1.06rem;color:var(--ib-mut);max-width:430px;margin:0 0 22px}
-    .ib-feats{display:flex;flex-wrap:wrap;gap:18px 26px;margin-bottom:8px}
-    .ib-feat{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:.85rem;font-weight:600;min-width:74px}
-    .ib-feat svg{width:30px;height:30px}
-    .ib-more{font-size:.85rem;color:var(--ib-mut);margin:4px 0 24px 52px}
-    .ib-buy{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
-    .ib-price{display:flex;align-items:center;gap:10px;background:var(--ib-yel);border-radius:999px;padding:10px 22px 10px 16px;font-weight:900}
-    .ib-price small{display:block;font-size:.7rem;letter-spacing:.06em;font-weight:800}
-    .ib-price b{font-size:1.65rem;letter-spacing:-.02em}
-    .ib-price b i{font-style:normal;font-size:.95rem;margin-right:4px}
-    .ib-cta{display:inline-flex;align-items:center;gap:12px;background:var(--ib-green);color:#fff;text-decoration:none;border-radius:999px;padding:12px 24px 12px 18px;box-shadow:0 6px 0 #1d281a}
-    .ib-cta:hover{transform:translateY(2px);box-shadow:0 4px 0 #1d281a}
-    .ib-cta strong{display:block;font-size:.98rem;letter-spacing:.02em}
-    .ib-cta small{display:block;font-size:.66rem;opacity:.85;letter-spacing:.06em}
-    .ib-cta svg{width:28px;height:28px;flex:none}
-    .ib-art{position:relative;min-height:440px}
-    .ib-art img{position:absolute;border-radius:10px;box-shadow:0 22px 40px rgba(60,45,10,.28);background:#fff}
-    .ib-art .ib-p1{width:46%;left:8%;top:30px;transform:rotate(-4deg);z-index:3;border:6px solid #fff}
-    .ib-art .ib-p2{width:40%;left:44%;top:6px;transform:rotate(5deg);z-index:2}
-    .ib-art .ib-p3{width:36%;right:-2%;top:90px;transform:rotate(12deg);z-index:1}
-    .ib-note1{position:absolute;right:2%;top:-18px;font-size:1.45rem;transform:rotate(-6deg);z-index:4}
-    .ib-badge{position:absolute;right:4%;bottom:10px;z-index:5;background:#fff;border-radius:14px;padding:14px 18px;box-shadow:0 14px 30px rgba(60,45,10,.18);text-align:center;transform:rotate(-3deg)}
-    .ib-badge strong{display:inline-block;background:var(--ib-yel);padding:4px 12px;border-radius:6px;font-size:.95rem;font-weight:900;line-height:1.25}
-    .ib-badge span{display:block;font-size:.9rem;color:var(--ib-mut);margin-top:8px}
-    .ib-sec{padding:44px 0}
-    .ib-sec h2{font-size:clamp(1.8rem,3.4vw,2.5rem);letter-spacing:-.03em;margin:0 0 4px;color:var(--ib-green)}
-    .ib-sec .ib-h2sub{color:var(--ib-mut);margin:0 0 30px;font-size:1.05rem}
-    .ib-head{position:relative}
-    .ib-head .ib-script{position:absolute;right:0;top:-6px;font-size:1.5rem;transform:rotate(-5deg)}
-    .ib-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;position:relative}
-    .ib-step{text-align:center;position:relative}
-    .ib-step:not(:last-child):after{content:"→";position:absolute;right:-14px;top:38px;font-size:1.4rem;color:#7a6a3a}
-    .ib-ico{width:84px;height:84px;border-radius:50%;background:var(--ib-yel2);display:grid;place-items:center;margin:0 auto 14px;position:relative}
-    .ib-ico svg{width:40px;height:40px}
-    .ib-num{position:absolute;left:-6px;top:-6px;width:28px;height:28px;border-radius:50%;background:#6b4f25;color:#fff;font-weight:900;font-size:.85rem;display:grid;place-items:center}
-    .ib-step h3{font-size:1rem;margin:0 0 6px}
-    .ib-step p{font-size:.86rem;color:var(--ib-mut);margin:0;line-height:1.45}
-    .ib-why{background:#fff1c9}
-    .ib-cards{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
-    .ib-card{background:#fffaf0;border-radius:22px;padding:20px 14px;text-align:center;box-shadow:0 8px 20px rgba(120,90,20,.08)}
-    .ib-card svg{width:46px;height:46px;margin-bottom:10px}
-    .ib-card h3{font-size:.95rem;margin:0 0 6px}
-    .ib-card p{font-size:.84rem;color:var(--ib-mut);margin:0;line-height:1.4}
-    .ib-cards2{display:grid;grid-template-columns:repeat(3,1fr) 1.4fr;gap:14px;margin-top:14px;align-items:center}
-    .ib-cards2 .ib-script{font-size:1.65rem;text-align:center;transform:rotate(-4deg)}
-    .ib-get-grid{display:grid;grid-template-columns:.9fr 1.1fr .9fr;gap:30px;align-items:center}
-    .ib-devices{position:relative;min-height:260px}
-    .ib-tablet{position:absolute;left:12%;top:0;width:62%;background:#1f1f1f;border-radius:22px;padding:10px;box-shadow:0 18px 34px rgba(0,0,0,.25);transform:rotate(-2deg)}
-    .ib-tablet img{width:100%;display:block;border-radius:12px;aspect-ratio:3/3.6;object-fit:cover;object-position:top}
-    .ib-phone{position:absolute;left:0;bottom:0;width:28%;background:#1f1f1f;border-radius:18px;padding:6px;box-shadow:0 14px 26px rgba(0,0,0,.25);z-index:2}
-    .ib-phone img{width:100%;display:block;border-radius:12px;aspect-ratio:9/16;object-fit:cover;object-position:top left}
-    .ib-sheet{position:absolute;right:0;top:20px;width:38%;transform:rotate(5deg);box-shadow:0 14px 26px rgba(0,0,0,.18);border-radius:6px}
-    .ib-list{list-style:none;padding:0;margin:0}
-    .ib-list li{display:flex;gap:10px;margin:9px 0;font-size:.95rem}
-    .ib-list li:before{content:"✓";font-weight:900;color:var(--ib-green)}
-    .ib-get h3{font-size:1.35rem;margin:0 0 10px;color:var(--ib-green)}
-    .ib-pay{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
-    .ib-pay .ib-script{font-size:1.4rem;transform:rotate(-4deg)}
-    .ib-pay .ib-price{border-radius:14px;padding:12px 26px;transform:rotate(-2deg)}
-    .ib-pay .ib-price b{font-size:2.1rem}
-    .ib-safe{font-size:.82rem;color:var(--ib-mut);display:flex;gap:8px;align-items:center}
-    .ib-safe svg{width:18px;height:18px}
-    .ib-foot{background:var(--ib-green);color:#f4efdc;padding:22px 0}
-    .ib-foot-grid{display:grid;grid-template-columns:auto 1fr auto;gap:30px;align-items:center}
-    .ib-foot .ib-script{color:#f6d77a;font-size:1.7rem;display:flex;align-items:center;gap:10px}
-    .ib-foot .ib-quote{font-family:"Caveat",cursive;font-size:1.45rem;text-align:center;color:#f4efdc}
-    .ib-foot-icons{display:flex;gap:26px}
-    .ib-foot-icons div{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:.75rem;text-align:center;line-height:1.2}
-    .ib-foot-icons svg{width:28px;height:28px}
-    @media(max-width:900px){
-      .ib-hero-grid,.ib-get-grid{grid-template-columns:1fr}
-      .ib-art{min-height:380px;max-width:520px;margin:10px auto 0;width:100%}
-      .ib-steps{grid-template-columns:repeat(2,1fr);gap:26px 14px}
-      .ib-step:after{display:none}
-      .ib-cards{grid-template-columns:repeat(2,1fr)}
-      .ib-cards2{grid-template-columns:repeat(2,1fr)}
-      .ib-head .ib-script{position:static;display:block;margin-bottom:8px}
-      .ib-devices{max-width:420px;margin:0 auto;width:100%}
-      .ib-foot-grid{grid-template-columns:1fr;justify-items:center;text-align:center}
-      .ib-more{margin-left:0}
-    }
-    @media(max-width:480px){.ib-art{min-height:300px}.ib-cards,.ib-cards2{grid-template-columns:1fr}.ib-steps{grid-template-columns:1fr}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#FBF6EE">
+<title>Planner Foco Leve: o planner para o cérebro com TDAH</title>
+<meta name="description" content="Planner digital e para impressão, não datado, feito para quem tem TDAH. 826 páginas, passo a passo e índice clicável.">
+<meta property="og:image" content="https://planner-foco-leve.vercel.app/hero-mockup.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FBF6EE}
+a{color:#8A3417}a:hover{color:#5E220E}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:60px;padding:0 34px;border-radius:14px;background:#9A3B1B;color:#FFFFFF;font-weight:700;font-size:17px;letter-spacing:.02em;text-transform:uppercase;text-decoration:none;box-shadow:0 6px 0 #6E2810;transition:transform .12s ease,box-shadow .12s ease}
+.btn:hover{color:#FFFFFF;transform:translateY(2px);box-shadow:0 4px 0 #6E2810}
+.pg{width:100%;height:auto;display:block;border-radius:10px;box-shadow:0 18px 36px -14px rgba(59,36,22,.35);border:1px solid rgba(59,36,22,.08)}
+.gal{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
+details summary{cursor:pointer;list-style:none}
+details summary::-webkit-details-marker{display:none}
+details[open] .pl{transform:rotate(45deg)}
+.pl{transition:transform .2s ease}
+@media (max-width:900px){
+.gal,.g4{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+.g3{grid-template-columns:repeat(1,minmax(0,1fr)) !important}
+.h1{font-size:40px !important}
+.h2{font-size:30px !important}
+.sec{padding:60px 18px !important}
+.hero{flex-direction:column !important;text-align:center !important}
+.hero .hx{align-items:center !important}
+.price{font-size:62px !important}
+}
+</style>
+<style>html{scroll-behavior:smooth}*{box-sizing:border-box}img{max-width:100%}</style>
 </head>
 <body>
-  <div class="announcement">🌿 Mais clareza para planejar. Mais leveza para começar.</div>
-  <header>
-    <div class="wrap nav">
-      <a class="brand" href="#inicio" aria-label="Foco Leve - início"><span class="brand-mark">✦</span> foco leve</a>
-      <span class="nav-note">Seu espaço para organizar ideias, tarefas e prioridades.</span>
-      <a class="btn" href="#oferta">Conhecer o planner <span aria-hidden="true">→</span></a>
+<div style="font-family: 'Poppins', system-ui, sans-serif; color: #3B2416; background: #FBF6EE; width: 100%; box-sizing: border-box; overflow: hidden">
+
+  <!-- TOPO -->
+  <div style="padding: 16px 24px; text-align: center; font-size: 17px; font-weight: 700; border-bottom: 1px solid rgba(59,36,22,.08)">Planner <span style="color: #9A3B1B">Foco Leve</span></div>
+
+  <!-- HERO -->
+  <section class="sec" style="padding: 64px 32px 72px">
+    <div class="hero" style="max-width: 1120px; margin: 0 auto; display: flex; gap: 40px; align-items: center">
+      <div class="hx" style="flex: 1 1 460px; display: flex; flex-direction: column; align-items: flex-start; gap: 22px">
+        <div style="background: #F3C877; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 8px 16px; border-radius: 999px">Para o cérebro com TDAH</div>
+        <h1 class="h1" style="margin: 0; font-size: 56px; line-height: 1.06; font-weight: 800; letter-spacing: -0.02em">O planner que trabalha <span style="color: #9A3B1B">junto</span> com o seu cérebro.</h1>
+        <p style="margin: 0; font-size: 19px; line-height: 1.6; color: #6E5646">Só 3 tarefas por dia. Um roteiro pronto para cada mês.</p>
+        <a class="btn" href="https://go.hotmart.com/B108131984S">Quero o meu planner</a>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: 14px; font-weight: 600; color: #4A2E1C">
+          <span>✓ 826 páginas</span><span>✓ Não datado</span><span>✓ Tablet ou impresso</span>
+        </div>
+      </div>
+      <div style="flex: 1 1 520px; max-width: 100%"><img src="hero-mockup.png" alt="Caderno do Planner Foco Leve e um tablet aberto na página Meu dia" style="width: 100%; height: auto; display: block"></div>
     </div>
-  </header>
+  </section>
 
-  <main>
-    <section class="hero" id="inicio">
-      <div class="wrap hero-grid">
-        <div class="hero-copy-wrap">
-          <span class="eyebrow">✨ PLANNER DIGITAL • ROTINA MAIS VISUAL</span>
-          <h1>Organize suas ideias. Planeje seu dia com <span class="highlight">mais leveza.</span></h1>
-          <p class="hero-copy">Conheça o <strong>Foco Leve</strong>: um planner visual para ajudar quem tem TDAH — e também estudantes em geral — a colocar as tarefas no papel, enxergar prioridades e organizar o próximo passo sem precisar manter tudo na cabeça.</p>
-
-          <div class="adhd-callout">
-            <span class="adhd-callout-icon">🧠</span>
-            <div><strong>Menos coisas para tentar lembrar. Mais clareza sobre o próximo passo.</strong><br><span>Um apoio visual para organizar tarefas, prioridades e estudos — no seu ritmo.</span></div>
-          </div>
-          <div class="hero-actions">
-            <a class="btn btn-yellow" href="https://go.hotmart.com/B108131984S" target="_blank" rel="noopener">Quero meu Foco Leve — R$ 38,82 <span aria-hidden="true">→</span></a>
-          </div>
-          <p class="micro">Acesso digital após a confirmação do pagamento, conforme as condições da plataforma de compra.</p>
-          <div class="ticks">
-            <span>Organização visual</span><span>Planejamento flexível</span><span>Para estudar e se organizar</span>
-          </div>
-        </div>
-        <div class="hero-art" aria-label="Ilustração demonstrativa de páginas de um planner digital">
-          <div class="blob"></div>
-          <div class="planner">
-            <div class="planner-top"><span class="planner-logo">FOCO LEVE ✦</span><span class="week">MEU PLANEJAMENTO</span></div>
-            <h3>Um dia de cada vez.</h3>
-            <div class="planner-label">Minhas prioridades</div>
-            <div class="mini-grid">
-              <div class="mini-card">01 · O mais importante<div class="lines"></div><div class="lines short"></div></div>
-              <div class="mini-card pink">02 · Uma tarefa de cada vez<div class="lines"></div><div class="lines short"></div></div>
-              <div class="mini-card lilac">Pausa também conta<div class="lines"></div><div class="lines short"></div></div>
-              <div class="mini-card green">Pequenas conquistas<div class="lines"></div><div class="lines short"></div></div>
-            </div>
-            <div class="planner-label">Como quero me sentir hoje?</div>
-            <div class="lines"></div><div class="lines"></div>
-          </div>
-          <div class="sticker one"><span>🌱</span> Progresso, não perfeição</div>
-          <div class="sticker two"><span>☀️</span> Recomece quando precisar</div>
-        </div>
+  <!-- VEJA POR DENTRO -->
+  <section class="sec" style="padding: 80px 32px; background: #F3C877">
+    <div style="max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px">
+      <div style="text-align: center; display: flex; flex-direction: column; gap: 10px; align-items: center">
+        <h2 class="h2" style="margin: 0; font-size: 42px; line-height: 1.12; font-weight: 800; letter-spacing: -0.02em">Veja por dentro</h2>
+        <p style="margin: 0; font-size: 18px; color: #4A2E1C">Mais de 826 páginas, prontas para usar.</p>
       </div>
-    </section>
-
-
-    <section class="section white" id="conheca-produto">
-      <div class="wrap product-showcase">
-        <div class="cover-stage" aria-label="Capa ilustrativa do produto digital Foco Leve">
-          <div class="cover-book">
-            <div class="cover-spark">✦</div>
-            <div class="cover-kicker">Planner digital</div>
-            <h3>FOCO<br><span>LEVE</span></h3>
-            <p class="cover-sub">Organize suas ideias.<br>Planeje um passo de cada vez.</p>
-            <div class="cover-illustration">
-              <div class="cover-tiles">
-                <span>MINHAS<br>PRIORIDADES</span><span>ROTINA<br>FLEXÍVEL</span>
-                <span>PLANO DE<br>ESTUDOS</span><span>PEQUENAS<br>CONQUISTAS</span>
-              </div>
-            </div>
-            <div class="cover-foot">MAIS CLAREZA · MAIS LEVEZA</div>
-          </div>
-          <div class="cover-badge">UM DIA<br>DE CADA<br>VEZ 🌿</div>
-          <div class="cover-caption">Seu espaço para recomeçar ☀️</div>
-        </div>
-        <div>
-          <span class="kicker">CONHEÇA O MATERIAL</span>
-          <h2>Um cantinho visual para organizar o que importa.</h2>
-          <p>O Foco Leve foi pensado para deixar a organização mais visual e concreta — algo especialmente útil para quem sente dificuldade em priorizar, lembrar pendências ou iniciar tarefas. Use as páginas como apoio, adaptando o planejamento à sua realidade.</p>
-          <ul class="feature-list">
-            <li>Visual leve, com áreas para registrar e revisar suas prioridades.</li>
-            <li>Um apoio para transformar ideias soltas em próximos passos.</li>
-            <li>Flexível: use as partes que combinam com seu jeito de se organizar.</li>
-          </ul>
-          <a class="btn" href="#oferta">Quero conhecer a oferta <span aria-hidden="true">→</span></a>
-        </div>
+      <div class="gal">
+        <div style="display: flex; flex-direction: column; gap: 10px"><img class="pg" src="img/meu-dia.jpg" alt="Página Meu dia"><span style="font-size: 15px; font-weight: 700; text-align: center">Meu dia</span></div>
+        <div style="display: flex; flex-direction: column; gap: 10px"><img class="pg" src="img/semana.jpg" alt="Página Minha semana"><span style="font-size: 15px; font-weight: 700; text-align: center">Minha semana</span></div>
+        <div style="display: flex; flex-direction: column; gap: 10px"><img class="pg" src="habitos.jpg" alt="Página Rastreador de hábitos"><span style="font-size: 15px; font-weight: 700; text-align: center">Hábitos</span></div>
+        <div style="display: flex; flex-direction: column; gap: 10px"><img class="pg" src="roda-da-vida.jpg" alt="Página Roda da vida"><span style="font-size: 15px; font-weight: 700; text-align: center">Roda da vida</span></div>
+        <div style="display: flex; flex-direction: column; gap: 10px"><img class="pg" src="metas.jpg" alt="Página Metas do ano"><span style="font-size: 15px; font-weight: 700; text-align: center">Metas do ano</span></div>
+        <div style="display: flex; flex-direction: column; gap: 10px"><img class="pg" src="img/orcamento.jpg" alt="Página Orçamento do mês"><span style="font-size: 15px; font-weight: 700; text-align: center">Orçamento</span></div>
+        <div style="display: flex; flex-direction: column; gap: 10px"><img class="pg" src="poupanca.jpg" alt="Página Desafio de poupança"><span style="font-size: 15px; font-weight: 700; text-align: center">Poupança</span></div>
+        <div style="display: flex; flex-direction: column; gap: 10px"><img class="pg" src="humor.jpg" alt="Página Mapa do humor"><span style="font-size: 15px; font-weight: 700; text-align: center">Mapa do humor</span></div>
       </div>
-    </section>
-
-    <section class="section white">
-      <div class="wrap">
-        <div class="section-head">
-          <span class="kicker">UM JEITO MAIS LEVE DE SE ORGANIZAR</span>
-          <h2>Quando a cabeça está cheia de tarefas, por onde começar?</h2>
-          <p>Para quem convive com distrações, dificuldade para priorizar ou sensação de estar com mil coisas na cabeça, visualizar as tarefas pode ser um apoio útil. O Foco Leve ajuda a externalizar lembretes, dividir atividades e enxergar um próximo passo de cada vez.</p>
-        </div>
-        <div class="cards">
-          <article class="card"><div class="icon">🧠</div><h3>Tire as tarefas da cabeça</h3><p>Anote tarefas, prazos e lembretes em um lugar visual, reduzindo a necessidade de tentar manter tudo na memória.</p></article>
-          <article class="card"><div class="icon">🎯</div><h3>Veja o que vem primeiro</h3><p>Organize as tarefas por prioridade e escolha um começo concreto quando tudo parecer urgente ou confuso.</p></article>
-          <article class="card"><div class="icon">🌿</div><h3>Planeje sem buscar perfeição</h3><p>Use o planejamento como apoio, não como cobrança. Se você se distrair ou o dia mudar, retome pelo próximo passo possível.</p></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="wrap split">
-        <div class="visual-panel">
-          <span class="kicker">EXEMPLO DE USO</span>
-          <h3>Um plano simples para deixar o próximo passo mais visível.</h3>
-          <div class="sample-list">
-            <div class="sample-row done"><span class="check"></span>Separar o material de estudo</div>
-            <div class="sample-row"><span class="check"></span>Estudar um tópico por 25 minutos</div>
-            <div class="sample-row"><span class="check"></span>Fazer uma pausa curta</div>
-            <div class="sample-row"><span class="check"></span>Revisar o que consegui concluir</div>
-          </div>
-          <p class="note" style="margin:18px 0 0">Exemplo ilustrativo de planejamento — adapte as tarefas ao seu dia.</p>
-        </div>
-        <div>
-          <span class="kicker">FEITO PARA A VIDA REAL</span>
-          <h2>Você não precisa resolver tudo de uma vez.</h2>
-          <p>Se começar tarefas, lembrar compromissos ou decidir por onde iniciar costuma ser difícil, experimente reduzir o plano: uma prioridade, uma ação pequena e uma pausa. Pequenos passos também contam.</p>
-          <ul class="feature-list">
-            <li>Deixe tarefas e compromissos visíveis em vez de depender só da memória.</li>
-            <li>Quebre atividades grandes em etapas menores e mais fáceis de iniciar.</li>
-            <li>Organize estudos, trabalho, autocuidado e tarefas do dia a dia em um só planejamento.</li>
-            <li>Retome de onde parou e reorganize o dia sem se culpar por mudanças ou imprevistos.</li>
-          </ul>
-          <p class="note">O planner é uma ferramenta de organização. Cada pessoa tem necessidades diferentes, e você pode adaptar o uso à sua rotina.</p>
-          <a class="btn" href="#oferta">Ver o que está incluído <span aria-hidden="true">→</span></a>
-        </div>
-      </div>
-    </section>
-
-
-    <section class="section" id="modo-de-uso">
-      <div class="wrap">
-        <div class="section-head">
-          <span class="kicker">MODO DE USO</span>
-          <h2>Como usar o Foco Leve para organizar sua rotina</h2>
-          <p>Para quem tem TDAH, um sistema simples e visual pode ser mais fácil de consultar. Comece pequeno: o planner deve apoiar sua organização, não virar mais uma obrigação.</p>
-        </div>
-        <div class="usage-grid">
-          <article class="usage-card"><div class="usage-number">01</div><h3>Escolha um momento curto</h3><p>Reserve alguns minutos para registrar compromissos, pendências e pensamentos que estão competindo pela sua atenção.</p></article>
-          <article class="usage-card"><div class="usage-number">02</div><h3>Defina poucas prioridades</h3><p>Escolha de uma a três prioridades realistas. Se uma tarefa parecer difícil de começar, transforme-a em uma ação pequena e específica.</p></article>
-          <article class="usage-card"><div class="usage-number">03</div><h3>Revise e ajuste</h3><p>Marque o que conseguiu fazer, mova o que ficou pendente e escolha o próximo passo. Você pode retomar o plano sempre que precisar.</p></article>
-        </div>
-        <p class="note" style="text-align:center;margin-top:20px">Dica: experimente por alguns dias e adapte o método ao que realmente funciona para você.</p>
-      </div>
-    </section>
-
-    <section class="section white">
-      <div class="wrap">
-        <div class="section-head">
-          <span class="kicker">COMECE SEM COMPLICAR</span>
-          <h2>Como usar o Foco Leve</h2>
-          <p>Não precisa preencher tudo nem seguir uma rotina perfeita. Comece com o que for útil para você.</p>
-        </div>
-        <div class="steps">
-          <article class="step"><h3>Descarregue as ideias</h3><p>Anote o que está ocupando sua atenção: tarefas, estudos, prazos ou pequenas pendências.</p></article>
-          <article class="step"><h3>Escolha o próximo passo</h3><p>Defina uma ou duas prioridades realistas e, se ajudar, divida cada uma em ações menores.</p></article>
-          <article class="step"><h3>Revise sem culpa</h3><p>No fim do período, veja o que avançou e ajuste o plano. O objetivo é apoiar você, não cobrar perfeição.</p></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section offer-section" id="oferta">
-      <div class="wrap offer-grid">
-        <div>
-          <span class="kicker">SEU PRÓXIMO PASSO COMEÇA AQUI</span>
-          <h2>Conheça o Foco Leve e crie um jeito de se organizar que faça sentido para você.</h2>
-          <p>Um recurso digital para apoiar a organização de tarefas, compromissos e estudos, especialmente para quem quer deixar as prioridades visíveis e dividir o dia em passos menores.</p>
-          <ul class="offer-points">
-            <li>Material digital de organização e planejamento</li>
-            <li>Use para estudos, trabalho e vida pessoal</li>
-            <li>Planejamento flexível, adaptável à sua rotina</li>
-            <li>Pagamento único de R$ 38,82, em até 12x</li>
-          </ul>
-          <p class="note" style="color:#d6e0d6">Confira na finalização da compra o formato dos arquivos, as instruções de acesso e os termos aplicáveis.</p>
-        </div>
-        <div class="price-card">
-          <span class="tag">FOCO LEVE • PLANNER DIGITAL</span>
-          <p class="price-label">Pagamento único</p>
-          <div class="price"><small>R$</small> 38,82</div>
-          <p>Um apoio visual para planejar prioridades e organizar seus próximos passos.</p>
-          <a class="btn btn-yellow checkout-link" href="https://go.hotmart.com/B108131984S" target="_blank" rel="noopener">Quero meu Foco Leve <span aria-hidden="true">→</span></a>
-          <p class="secure">🔒 Você será direcionado(a) à página de pagamento.</p>
-        </div>
-      </div>
-    </section>
-
-
-    <section class="ib" id="beneficios-ilustrados">
-      <div class="ib-hero">
-        <div class="wrap ib-hero-grid">
-          <div>
-            <h2 class="ib-logo">FOCO <span>LEVE</span></h2>
-            <div class="ib-sub">PLANNER DIGITAL</div>
-            <p class="ib-script ib-tag">Organize sua mente,<br>conquiste seus objetivos.</p>
-            <span class="ib-under" aria-hidden="true"></span>
-            <p class="ib-lead">Um planner completo, prático e visual, feito para te ajudar a planejar, focar e ter mais leveza no seu dia a dia.</p>
-            <div class="ib-feats">
-              <div class="ib-feat"><svg viewBox="0 0 24 24" fill="none" stroke="#2f3f2a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5.5 5.5l1.8 1.8M16.7 16.7l1.8 1.8M5.5 18.5l1.8-1.8M16.7 7.3l1.8-1.8"/></svg>Planejamento</div>
-              <div class="ib-feat"><svg viewBox="0 0 24 24" fill="none" stroke="#2f3f2a" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg>Foco</div>
-              <div class="ib-feat"><svg viewBox="0 0 24 24" fill="none" stroke="#2f3f2a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8 12.3l2.8 2.8L16.5 9"/></svg>Hábitos</div>
-              <div class="ib-feat"><svg viewBox="0 0 24 24" fill="none" stroke="#2f3f2a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.2 4.2 0 0 1 12 7.3a4.2 4.2 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z"/><path d="M9 12l2 2 4-4"/></svg>Autocuidado</div>
-            </div>
-            <p class="ib-more">Finanças · Casa · Mente tranquila</p>
-            <div class="ib-buy">
-              <div class="ib-price"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2b2a22" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.4"/></svg><div><small>APENAS</small><b><i>R$</i>38,82</b></div></div>
-              <a class="ib-cta" href="https://go.hotmart.com/B108131984S" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4h2.6l2.3 11h11l2-8H6.3"/><circle cx="9" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/></svg><span><strong>QUERO MEU FOCO LEVE</strong><small>ACESSO IMEDIATO · PAGAMENTO SEGURO</small></span></a>
-            </div>
-          </div>
-          <div class="ib-art">
-            <span class="ib-script ib-note1">Mais organização<br>para a sua rotina!</span>
-            <img class="ib-p1" src="img/capa.jpg" alt="Capa do Planner Foco Leve" loading="lazy">
-            <img class="ib-p2" src="img/meu-dia.jpg" alt="Página Meu dia" loading="lazy">
-            <img class="ib-p3" src="img/semana.jpg" alt="Página Minha semana" loading="lazy">
-            <div class="ib-badge"><strong>PLANNER DIGITAL<br>NÃO DATADO</strong><span>Use quando quiser,<br>no seu ritmo!</span></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="ib-sec">
-        <div class="wrap">
-          <div class="ib-head">
-            <h2>Como funciona?</h2>
-            <p class="ib-h2sub">É simples e direto, do seu jeito!</p>
-            <span class="ib-script">Passo a passo<br>simples e prático!</span>
-          </div>
-          <div class="ib-steps">
-            <div class="ib-step"><div class="ib-ico"><span class="ib-num">1</span><svg viewBox="0 0 24 24" fill="none" stroke="#2b2a22" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5a3 3 0 0 0-5 2.3 3 3 0 0 0-.6 5 3 3 0 0 0 2.4 4.6A3 3 0 0 0 11 18V5.5A2.5 2.5 0 0 0 9 4.5z"/><path d="M15 4.5a3 3 0 0 1 5 2.3 3 3 0 0 1 .6 5 3 3 0 0 1-2.4 4.6A3 3 0 0 1 13 18V5.5a2.5 2.5 0 0 1 2-1z"/></svg></div><h3>Despeje sua mente</h3><p>Comece tirando tudo o que está na cabeça (sem ordem).</p></div>
-            <div class="ib-step"><div class="ib-ico"><span class="ib-num">2</span><svg viewBox="0 0 24 24" fill="none" stroke="#2b2a22" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M8.5 10l1.5 1.5L12.5 9M14 10.5h2M8.5 15l1.5 1.5L12.5 14M14 15.5h2"/></svg></div><h3>Escolha 3 prioridades</h3><p>Defina o que realmente importa para você no momento.</p></div>
-            <div class="ib-step"><div class="ib-ico"><span class="ib-num">3</span><svg viewBox="0 0 24 24" fill="none" stroke="#2b2a22" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M7.5 13.5h2M11 13.5h2M14.5 13.5h2M7.5 16.5h2M11 16.5h2"/></svg></div><h3>Planeje seu dia</h3><p>Use o Top 3 e anote os compromissos com horário.</p></div>
-            <div class="ib-step"><div class="ib-ico"><span class="ib-num">4</span><svg viewBox="0 0 24 24" fill="none" stroke="#2b2a22" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8 12.3l2.8 2.8L16.5 9"/></svg></div><h3>Aja e acompanhe</h3><p>Quebre tarefas grandes, marque o que fez e revise no fim do dia.</p></div>
-            <div class="ib-step"><div class="ib-ico"><span class="ib-num">5</span><svg viewBox="0 0 24 24" fill="none" stroke="#2b2a22" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.2l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.6l-5.2 2.7 1-5.8-4.3-4.1 5.9-.8z"/></svg></div><h3>Evolua toda semana</h3><p>Faça sua revisão semanal e ajuste o que for preciso. Sem culpa, sem pressão.</p></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="ib-sec ib-why">
-        <div class="wrap">
-          <h2>Por que escolher o Foco Leve?</h2>
-          <p class="ib-h2sub">Mais do que um planner, é um aliado na sua rotina.</p>
-          <div class="ib-cards">
-            <div class="ib-card"><svg viewBox="0 0 24 24" fill="#fbd877" stroke="#5a3d1e" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5a3 3 0 0 0-5 2.3 3 3 0 0 0-.6 5 3 3 0 0 0 2.4 4.6A3 3 0 0 0 11 18V5.5A2.5 2.5 0 0 0 9 4.5z"/><path d="M15 4.5a3 3 0 0 1 5 2.3 3 3 0 0 1 .6 5 3 3 0 0 1-2.4 4.6A3 3 0 0 1 13 18V5.5a2.5 2.5 0 0 1 2-1z"/></svg><h3>Reduz a sobrecarga mental</h3><p>Você coloca suas ideias no papel e ganha clareza.</p></div>
-            <div class="ib-card"><svg viewBox="0 0 24 24" fill="none" stroke="#2f3f2a" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="#fbd877"/><circle cx="12" cy="12" r="4.5" fill="#fff8e8"/><circle cx="12" cy="12" r="1.2" fill="#2f3f2a"/><path d="M12 12l7-7M16 4.5l3 .5.5 3"/></svg><h3>Ajuda a manter o foco</h3><p>Com prioridades claras, você faz o que realmente importa.</p></div>
-            <div class="ib-card"><svg viewBox="0 0 24 24" fill="#fff" stroke="#2b2a22" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M7.5 13.5h2M11 13.5h2M14.5 13.5h2M7.5 16.5h2M11 16.5h2"/></svg><h3>Organiza sua rotina</h3><p>Tarefas, compromissos e hábitos em um só lugar.</p></div>
-            <div class="ib-card"><svg viewBox="0 0 24 24" fill="none" stroke="#2b2a22" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="14" width="3" height="6" fill="#fbd877"/><rect x="10" y="11" width="3" height="9" fill="#fbd877"/><rect x="16" y="8" width="3" height="12" fill="#fbd877"/><path d="M4 10l5-4 4 3 6-5M16 4h3v3"/></svg><h3>Aumenta sua produtividade</h3><p>Menos distrações, mais coisas concluídas.</p></div>
-            <div class="ib-card"><svg viewBox="0 0 24 24" fill="#fbd877" stroke="#2b2a22" stroke-width="1.3" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.2 4.2 0 0 1 12 7.3a4.2 4.2 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z"/></svg><h3>Estimula o autocuidado</h3><p>Você também precisa ser prioridade.</p></div>
-          </div>
-          <div class="ib-cards2">
-            <div class="ib-card"><svg viewBox="0 0 24 24" fill="#fbd877" stroke="#2b2a22" stroke-width="1.3" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="12" rx="2.5"/><path d="M5 7l9-3 2 3M16 11.5h5v4h-5a2 2 0 0 1 0-4z" fill="#fff"/></svg><h3>Facilita o controle financeiro</h3><p>Planeje seus gastos e alcance seus objetivos.</p></div>
-            <div class="ib-card"><svg viewBox="0 0 24 24" fill="#fbd877" stroke="#2b2a22" stroke-width="1.3" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11L12 4l8.5 7M6 9.5V20h12V9.5"/><path d="M10 20v-5h4v5" fill="#fff"/></svg><h3>Organiza sua casa</h3><p>Ambientes mais leves e funcionais.</p></div>
-            <div class="ib-card"><svg viewBox="0 0 24 24" fill="#fbd877" stroke="#2b2a22" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 14c1 1.6 2.2 2.3 3.5 2.3s2.5-.7 3.5-2.3M9 10h.01M15 10h.01" stroke-width="1.8"/></svg><h3>Traz mais tranquilidade</h3><p>Você se sente mais no controle do seu dia.</p></div>
-            <p class="ib-script">Tudo isso em um formato simples, visual e personalizável para a sua realidade!</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="ib-sec ib-get">
-        <div class="wrap ib-get-grid">
-          <div class="ib-devices" aria-hidden="true">
-            <div class="ib-tablet"><img src="img/semana.jpg" alt="" loading="lazy"></div>
-            <div class="ib-phone"><img src="img/meu-dia.jpg" alt="" loading="lazy"></div>
-            <img class="ib-sheet" src="img/mes.jpg" alt="" loading="lazy">
-          </div>
-          <div>
-            <h3>O que você recebe?</h3>
-            <ul class="ib-list">
-              <li>Planner completo em PDF (não datado)</li>
-              <li>Índice interativo e links clicáveis</li>
-              <li>Páginas organizadas e intuitivas</li>
-              <li>Módulos de planejamento, hábitos, finanças, estudos e muito mais</li>
-              <li>Compatível com celular, tablet e computador</li>
-              <li>Acesso imediato após a compra</li>
-            </ul>
-          </div>
-          <div class="ib-pay">
-            <span class="ib-script">Investimento que<br>cabe no seu bolso!</span>
-            <div class="ib-price"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#2b2a22" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.4"/></svg><div><small>APENAS</small><b><i>R$</i>38,82</b></div></div>
-            <a class="ib-cta" href="https://go.hotmart.com/B108131984S" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4h2.6l2.3 11h11l2-8H6.3"/><circle cx="9" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/></svg><span><strong>QUERO MEU FOCO LEVE</strong><small>ACESSO IMEDIATO · PAGAMENTO SEGURO</small></span></a>
-            <div class="ib-safe"><svg viewBox="0 0 24 24" fill="none" stroke="#5f5a4c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Pix ou cartão · Compra segura pela Hotmart</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="ib-foot">
-        <div class="wrap ib-foot-grid">
-          <div class="ib-script"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#f6d77a" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg>Foco Leve</div>
-          <p class="ib-quote">Você não precisa ser perfeito,<br>só precisa de um bom plano.</p>
-          <div class="ib-foot-icons">
-            <div><svg viewBox="0 0 24 24" fill="none" stroke="#f4efdc" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M6 2.5h8l4 4v15H6z"/><path d="M14 2.5v4h4"/><text x="8" y="17" font-size="5" fill="#f4efdc" stroke="none" font-family="sans-serif" font-weight="700">PDF</text></svg>Acesso<br>imediato</div>
-            <div><svg viewBox="0 0 24 24" fill="none" stroke="#f4efdc" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4" width="15" height="11" rx="1.5"/><path d="M7 19h6"/><rect x="15.5" y="9" width="6" height="11" rx="1.5"/></svg>Use onde<br>quiser</div>
-            <div><svg viewBox="0 0 24 24" fill="none" stroke="#f4efdc" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.2 4.2 0 0 1 12 7.3a4.2 4.2 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z"/></svg>Seu ritmo,<br>sem pressão</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="wrap">
-        <div class="section-head">
-          <span class="kicker">DÚVIDAS FREQUENTES</span>
-          <h2>Antes de começar</h2>
-        </div>
-        <div class="faq">
-          <details><summary>O Foco Leve é indicado apenas para quem tem TDAH?</summary><p>Não. O Foco Leve pode ser usado por pessoas com TDAH, estudantes e qualquer pessoa que queira organizar tarefas visualmente. Ele é uma ferramenta de apoio à rotina, e a experiência varia de pessoa para pessoa.</p></details>
-          <details><summary>O planner trata ou cura o TDAH?</summary><p>Não. O Foco Leve é uma ferramenta de organização e planejamento, não um tratamento médico ou psicológico. Ele não substitui avaliação, orientação ou acompanhamento profissional.</p></details>
-          <details><summary>Como vou receber o produto?</summary><p>Você recebe arquivos em PDF (tamanho A4): o Planner Ano Completo, com 826 páginas, e o Pacote do Mês. Logo após a confirmação do pagamento, a Hotmart envia o acesso para o seu e-mail.</p></details>
-          <details><summary>Preciso preencher todas as páginas?</summary><p>Não. Use somente as partes que fizerem sentido para você. O planejamento pode ser ajustado de acordo com sua rotina, seus objetivos e sua disponibilidade.</p></details>
-          <details><summary>Como funciona a garantia?</summary><p>Você tem 7 dias de garantia. Se não gostar, peça o reembolso pela própria Hotmart dentro desse prazo e receba 100% do valor de volta.</p></details>
-          <details><summary>Em quais dispositivos posso usar?</summary><p>No celular, no tablet ou no computador, em qualquer leitor de PDF. Para escrever nas páginas, use um app de anotações como GoodNotes, Notability, Xodo ou Samsung Notes. Também dá para imprimir quantas vezes quiser.</p></details>
-        </div>
-      </div>
-    </section>
-
-    <section class="final-cta">
-      <div class="wrap">
-        <span class="kicker">UM PASSO DE CADA VEZ</span>
-        <h2>Seu planejamento não precisa ser perfeito.<br>Ele precisa ajudar você.</h2>
-        <p>Comece com uma prioridade, organize o próximo passo e ajuste o caminho sempre que precisar.</p>
-        <a class="btn" href="https://go.hotmart.com/B108131984S" target="_blank" rel="noopener">Quero meu Foco Leve — R$ 38,82 <span aria-hidden="true">→</span></a>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="wrap">
-      <div class="footer-inner">
-        <strong>✦ Foco Leve</strong>
-        <span>© <span id="year"></span> Foco Leve. Todos os direitos reservados.</span>
-        <span><a href="https://go.hotmart.com/B108131984S" target="_blank" rel="noopener">Comprar</a> · <a href="termos.html">Termos de uso</a> · <a href="privacidade.html">Política de privacidade</a></span>
-      </div>
-      <p class="disclaimer">O Foco Leve é uma ferramenta de apoio à organização pessoal, ao planejamento e à visualização de tarefas. Pode ser útil para pessoas com TDAH, mas não diagnostica, trata ou cura TDAH e não substitui avaliação ou acompanhamento profissional. Os resultados dependem do uso individual.</p>
+      <div style="text-align: center"><a class="btn" href="https://go.hotmart.com/B108131984S">Quero o meu planner</a></div>
     </div>
+  </section>
+
+  <!-- FERRAMENTAS PARA TDAH -->
+  <section class="sec" style="padding: 88px 32px">
+    <div style="max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px">
+      <h2 class="h2" style="margin: 0; font-size: 42px; line-height: 1.12; font-weight: 800; letter-spacing: -0.02em; text-align: center">Ferramentas feitas para o TDAH</h2>
+      <div class="g3">
+        <div style="background: #FFFDF9; border: 1px solid rgba(59,36,22,.08); border-radius: 22px; padding: 22px; display: flex; flex-direction: column; gap: 14px">
+          <div style="background: #FBF0D9; border-radius: 14px; padding: 18px 18px 0; height: 300px; overflow: hidden"><img class="pg" src="quebra-tarefa.jpg" alt="Página Quebra-tarefa"></div>
+          <div style="font-size: 20px; font-weight: 800">Quebra-tarefa</div>
+          <div style="font-size: 15px; line-height: 1.55; color: #6E5646">Travou? Divida em passos de 15 minutos.</div>
+        </div>
+        <div style="background: #FFFDF9; border: 1px solid rgba(59,36,22,.08); border-radius: 22px; padding: 22px; display: flex; flex-direction: column; gap: 14px">
+          <div style="background: #FBF0D9; border-radius: 14px; padding: 18px 18px 0; height: 300px; overflow: hidden"><img class="pg" src="despejo-mental.jpg" alt="Página Despejo mental"></div>
+          <div style="font-size: 20px; font-weight: 800">Despejo mental</div>
+          <div style="font-size: 15px; line-height: 1.55; color: #6E5646">Cabeça cheia? Tire tudo e organize depois.</div>
+        </div>
+        <div style="background: #FFFDF9; border: 1px solid rgba(59,36,22,.08); border-radius: 22px; padding: 22px; display: flex; flex-direction: column; gap: 14px">
+          <div style="background: #FBF0D9; border-radius: 14px; padding: 18px 18px 0; height: 300px; overflow: hidden"><img class="pg" src="lista-espera.jpg" alt="Página Lista de espera de compras"></div>
+          <div style="font-size: 20px; font-weight: 800">Lista de espera</div>
+          <div style="font-size: 15px; line-height: 1.55; color: #6E5646">Vontade de comprar? Espere 48 horas.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA -->
+  <section class="sec" style="padding: 0 32px 88px">
+    <div style="max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px">
+      <h2 class="h2" style="margin: 0; font-size: 42px; line-height: 1.12; font-weight: 800; letter-spacing: -0.02em; text-align: center">Como funciona</h2>
+      <div class="g4">
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <div style="background: #F3C877; border-radius: 18px; padding: 18px 18px 0; height: 230px; overflow: hidden"><img class="pg" src="img/passo-a-passo.jpg" alt="Página Passo a passo"></div>
+          <div style="font-size: 18px; font-weight: 800"><span style="color: #9A3B1B">1</span> Siga o passo a passo</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <div style="background: #F3C877; border-radius: 18px; padding: 18px 18px 0; height: 230px; overflow: hidden"><img class="pg" src="img/mes.jpg" alt="Divisória do mês"></div>
+          <div style="font-size: 18px; font-weight: 800"><span style="color: #9A3B1B">2</span> Abra o roteiro do mês</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <div style="background: #F3C877; border-radius: 18px; padding: 18px 18px 0; height: 230px; overflow: hidden"><img class="pg" src="img/meu-dia.jpg" alt="Página Meu dia"></div>
+          <div style="font-size: 18px; font-weight: 800"><span style="color: #9A3B1B">3</span> Escolha 3 tarefas por dia</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <div style="background: #F3C877; border-radius: 18px; padding: 18px 18px 0; height: 230px; overflow: hidden"><img class="pg" src="img/semana.jpg" alt="Página Minha semana"></div>
+          <div style="font-size: 18px; font-weight: 800"><span style="color: #9A3B1B">4</span> Revise no domingo</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OFERTA -->
+  <section id="oferta" class="sec" style="padding: 88px 32px; background: #F3C877">
+    <div style="max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 28px">
+      <h2 class="h2" style="margin: 0; font-size: 42px; line-height: 1.12; font-weight: 800; letter-spacing: -0.02em; text-align: center">Comece antes da virada do ano</h2>
+      <div style="position: relative; width: 100%; max-width: 500px; background: #FFFDF9; border: 2px solid #9A3B1B; border-radius: 26px; padding: 40px 32px 34px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; box-shadow: 0 30px 60px -24px rgba(59,36,22,.45)">
+        <div style="position: absolute; top: -17px; left: 50%; transform: translateX(-50%); background: #9A3B1B; color: #FFFFFF; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 7px 18px; border-radius: 999px; white-space: nowrap">Oferta de lançamento</div>
+        <div style="position: absolute; top: -14px; right: -12px; background: #3B2416; color: #F3C877; font-size: 14px; font-weight: 800; padding: 8px 12px; border-radius: 12px; transform: rotate(8deg)">33% OFF</div>
+        <img src="capa-mockup.png" alt="Capa do Planner Foco Leve" style="width: 230px; height: auto; display: block">
+        <div style="display: flex; align-items: baseline; justify-content: center; gap: 12px; flex-wrap: wrap">
+          <span style="font-size: 22px; font-weight: 600; color: #6E5646; text-decoration: line-through">R$ 57,90</span>
+          <span class="price" style="font-size: 74px; line-height: 1; font-weight: 800; letter-spacing: -0.03em">R$ 38,82</span>
+        </div>
+        <div style="font-size: 14px; font-weight: 600; color: #6E5646">ou em até 12x · pagamento único</div>
+        <div style="width: 100%; display: flex; flex-direction: column; gap: 9px; text-align: left; font-size: 15px">
+          <div>✓ Planner Ano Completo: 826 páginas</div>
+          <div>✓ Pacote do Mês para imprimir aos poucos</div>
+          <div>✓ Kit de ferramentas e diário de sintomas</div>
+          <div>✓ Índice clicável para tablet</div>
+        </div>
+        <a class="btn" href="https://go.hotmart.com/B108131984S" style="width: 100%; box-sizing: border-box">Garantir meu planner</a>
+        <div style="font-size: 13px; color: #6E5646"><strong style="color: #3B2416">Garantia de 7 dias</strong> · Compra segura pela Hotmart</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAMBÉM INCLUSO -->
+  <section class="sec" style="padding: 88px 32px">
+    <div style="max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px">
+      <h2 class="h2" style="margin: 0; font-size: 42px; line-height: 1.12; font-weight: 800; letter-spacing: -0.02em; text-align: center">Também incluso</h2>
+      <div class="g4">
+        <div style="display: flex; flex-direction: column; gap: 12px; align-items: center; text-align: center">
+          <img class="pg" src="img/mes.jpg" alt="Pacote do Mês">
+          <span style="background: #9A3B1B; color: #FFFFFF; font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 999px">86 páginas</span>
+          <div style="font-size: 17px; font-weight: 800">Pacote do Mês</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px; align-items: center; text-align: center">
+          <img class="pg" src="matriz.jpg" alt="Kit de ferramentas: Matriz de prioridades">
+          <span style="background: #9A3B1B; color: #FFFFFF; font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 999px">22 páginas</span>
+          <div style="font-size: 17px; font-weight: 800">Kit de ferramentas</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px; align-items: center; text-align: center">
+          <img class="pg" src="diario-sintomas.jpg" alt="Diário de sintomas">
+          <span style="background: #9A3B1B; color: #FFFFFF; font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 999px">1 por mês</span>
+          <div style="font-size: 17px; font-weight: 800">Diário de sintomas</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px; align-items: center; text-align: center">
+          <img class="pg" src="tecnicas.jpg" alt="Técnicas para acalmar">
+          <span style="background: #9A3B1B; color: #FFFFFF; font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 999px">Mente tranquila</span>
+          <div style="font-size: 17px; font-weight: 800">Técnicas para acalmar</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUEM CRIOU -->
+  <section class="sec" style="padding: 0 32px 88px">
+    <div style="max-width: 900px; margin: 0 auto; background: #FFFDF9; border: 1px solid rgba(59,36,22,.08); border-radius: 28px; padding: 32px; display: flex; flex-wrap: wrap; gap: 32px; align-items: center">
+      <div style="flex: 0 0 200px; max-width: 100%"><img src="criador.jpg" alt="Eduardo, estudante de Medicina e criador do Planner Foco Leve" style="width: 100%; height: auto; display: block; border-radius: 22px; border: 6px solid #F3C877"></div>
+      <div style="flex: 1 1 320px; display: flex; flex-direction: column; gap: 12px">
+        <div style="font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #9A3B1B">Quem criou</div>
+        <div style="font-size: 26px; line-height: 1.25; font-weight: 800">Olá! Eu sou o Eduardo, estudante de Medicina.</div>
+        <p style="margin: 0; font-size: 16px; line-height: 1.7; color: #4A2E1C">Criei o Foco Leve com ferramentas simples, que funcionam mesmo nos dias em que a cabeça não ajuda.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="sec" style="padding: 88px 32px; background: #F3C877">
+    <div style="max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px">
+      <h2 class="h2" style="margin: 0 0 18px; font-size: 42px; line-height: 1.12; font-weight: 800; letter-spacing: -0.02em; text-align: center">Dúvidas</h2>
+      <details style="background: #FFFDF9; border-radius: 16px; padding: 20px 24px">
+        <summary style="font-size: 17px; font-weight: 700; display: flex; justify-content: space-between; gap: 16px; align-items: center">Como recebo?<svg class="pl" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A3B1B" stroke-width="2.4" stroke-linecap="round" aria-hidden="true" style="flex: none"><path d="M12 5v14M5 12h14"/></svg></summary>
+        <p style="margin: 12px 0 0; font-size: 16px; line-height: 1.7; color: #4A2E1C">Na hora, por e-mail, depois da confirmação do pagamento.</p>
+      </details>
+      <details style="background: #FFFDF9; border-radius: 16px; padding: 20px 24px">
+        <summary style="font-size: 17px; font-weight: 700; display: flex; justify-content: space-between; gap: 16px; align-items: center">Funciona no tablet?<svg class="pl" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A3B1B" stroke-width="2.4" stroke-linecap="round" aria-hidden="true" style="flex: none"><path d="M12 5v14M5 12h14"/></svg></summary>
+        <p style="margin: 12px 0 0; font-size: 16px; line-height: 1.7; color: #4A2E1C">Sim: GoodNotes, Notability, Xodo, Samsung Notes. Também dá para imprimir.</p>
+      </details>
+      <details style="background: #FFFDF9; border-radius: 16px; padding: 20px 24px">
+        <summary style="font-size: 17px; font-weight: 700; display: flex; justify-content: space-between; gap: 16px; align-items: center">É assinatura?<svg class="pl" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A3B1B" stroke-width="2.4" stroke-linecap="round" aria-hidden="true" style="flex: none"><path d="M12 5v14M5 12h14"/></svg></summary>
+        <p style="margin: 12px 0 0; font-size: 16px; line-height: 1.7; color: #4A2E1C">Não. Pagamento único.</p>
+      </details>
+      <details style="background: #FFFDF9; border-radius: 16px; padding: 20px 24px">
+        <summary style="font-size: 17px; font-weight: 700; display: flex; justify-content: space-between; gap: 16px; align-items: center">E se não gostar?<svg class="pl" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A3B1B" stroke-width="2.4" stroke-linecap="round" aria-hidden="true" style="flex: none"><path d="M12 5v14M5 12h14"/></svg></summary>
+        <p style="margin: 12px 0 0; font-size: 16px; line-height: 1.7; color: #4A2E1C">Você tem 7 dias de garantia, com reembolso total pela Hotmart.</p>
+      </details>
+      <details style="background: #FFFDF9; border-radius: 16px; padding: 20px 24px">
+        <summary style="font-size: 17px; font-weight: 700; display: flex; justify-content: space-between; gap: 16px; align-items: center">Preciso de diagnóstico de TDAH?<svg class="pl" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A3B1B" stroke-width="2.4" stroke-linecap="round" aria-hidden="true" style="flex: none"><path d="M12 5v14M5 12h14"/></svg></summary>
+        <p style="margin: 12px 0 0; font-size: 16px; line-height: 1.7; color: #4A2E1C">Não. Serve para qualquer pessoa com dificuldade de foco e rotina.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="sec" style="padding: 80px 32px">
+    <div style="max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center">
+      <img src="capa-mockup.png" alt="Capa do Planner Foco Leve" style="width: 200px; height: auto; display: block">
+      <h2 class="h2" style="margin: 0; font-size: 40px; line-height: 1.12; font-weight: 800; letter-spacing: -0.02em">Comece hoje, com só 3 tarefas.</h2>
+      <div style="font-size: 18px; color: #6E5646"><span style="text-decoration: line-through">R$ 57,90</span> <strong style="font-size: 30px; color: #9A3B1B">R$ 38,82</strong></div>
+      <a class="btn" href="https://go.hotmart.com/B108131984S">Garantir meu planner</a>
+    </div>
+  </section>
+
+  <footer style="padding: 32px 24px; border-top: 1px solid rgba(59,36,22,.1); text-align: center; font-size: 13px; line-height: 1.7; color: #6E5646; display: flex; flex-direction: column; gap: 6px">
+    <div style="font-weight: 700; color: #3B2416">Planner Foco Leve</div>
+    <div>Ferramenta de organização. Não substitui avaliação ou acompanhamento com médico ou psicólogo.</div>
+    <div><a href="termos.html">Termos de uso</a> · <a href="privacidade.html">Política de privacidade</a></div>
   </footer>
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
+</div>
 </body>
 </html>
